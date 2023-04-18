@@ -1,0 +1,108 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="icon" href="data:">
+<title>svgdebug</title>
+</head><body>
+
+<h1>svgdebug</h1>
+<div id=div></div>
+<textarea id=ta></textarea><br>
+<button id=btndownload>download SVG</button>
+
+<hr>
+lineTo: click<br>
+moveTo: command+click or alt+click<br>
+undo: ctrl+Z<br>
+<br>
+<a href=https://github.com/svgdebug/>src on GitHub</a>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: sans-serif;
+}
+#div {
+  width: 100%;
+  aspect-ratio: 1;
+}
+#ta {
+  width: 100%;
+  height: 10em;
+}
+</style>
+
+<script type="module">
+import { downloadFile } from "https://js.sabae.cc/downloadFile.js";
+
+export const createSVG = () => {
+  const ns = "http://www.w3.org/2000/svg";
+  const cr = (tag) => document.createElementNS(ns, tag);
+  const svg = cr("svg");
+  svg.setAttribute("xmlns", ns);
+  svg.cr = cr;
+  return svg;
+};
+export const setAttributes = (c, att) => {
+  for (const name in att) {
+    c.setAttribute(name, att[name]);
+  }
+};
+
+const svg = createSVG();
+div.appendChild(svg);
+
+const path = svg.cr("path");
+setAttributes(path, { stroke: "black", fill: "rgba(0, 0, 0, .5)" });
+svg.appendChild(path);
+const pathd = [];
+const showPath = () => {
+  path.setAttribute("d", pathd.join(""));
+  ta.value = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${svg.getAttribute("viewBox")}">${path.outerHTML}</svg>`;
+};
+const addPath = (x, y, flgmove) => {
+  if (pathd.length == 0) {
+    flgmove = true;
+  }
+  pathd.push((flgmove ? "M" : "L") + x + "," + y);
+  showPath();
+};
+const undoPath = () => {
+  pathd.pop();
+  showPath();
+};
+
+const step = 20;
+const w = 4;
+const dw = 17;
+const dh = 17;
+const offset = 20;
+svg.setAttribute("viewBox", `0 0 ${dw * step + offset * 2} ${dh * step + offset * 2}`);
+for (let i = 0; i < dh; i++) {
+  for (let j = 0; j < dw; j++) {
+    const dot = svg.cr("circle");
+    const cx = j * step + offset;
+    const cy = i * step + offset;
+    const r = w;
+    dot.x = cx;
+    dot.y = cy;
+    const fill = "#aaa";
+    setAttributes(dot, { cx, cy, r, fill });
+    svg.appendChild(dot);
+    dot.onclick = (e) => {
+      const flgmove = e.metaKey;
+      addPath(dot.x, dot.y, flgmove);
+    };
+  }
+}
+
+document.body.onkeypress = (e) => {
+  if (e.ctrlKey && e.key == "z") {
+    undoPath();
+  }
+};
+
+btndownload.onclick = () => downloadFile("svgdebug.svg", new TextEncoder().encode(ta.value));
+</script>
+
+</body><html>
+  
