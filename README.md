@@ -1,19 +1,25 @@
 # svgdebug
-日本語のREADMEはこちらです: [README.ja.md](README.ja.md)
 
-A simple SVG drawing tool.
+A Web/Code project by [Code for FUKUI](https://github.com/code4fukui).
 
-## Demo
-https://code4fukui.github.io/svgdebug/
+**Live demo**: https://code4fukui.github.io/svgdebug/
 
-## Features
-- Draw lines by clicking
-- Move the drawing by command/alt-clicking
-- Undo drawing with Ctrl+Z
-- Download the SVG drawing
+## Technology Stack
 
-## Usage
-The tool is accessible through a web browser. Simply click or command/alt-click on the grid to draw lines and shapes. The generated SVG code is displayed in the textarea and can be downloaded by clicking the "download SVG" button.
+**Browser modules (ES imports):**
+
+- [`downloadFile.js`](https://js.sabae.cc/downloadFile.js)
+
+
+## Installation & Setup
+
+No build step required. Clone the repository and open `index.html` in a browser,
+or visit the live demo at https://code4fukui.github.io/svgdebug/
+
+## Contributing
+
+Contributions are welcome. Please open an issue or pull request on GitHub.
 
 ## License
-This project is licensed under the [MIT License](LICENSE).
+
+MIT License. See [LICENSE](./LICENSE) for details.
